@@ -1,4 +1,6 @@
 import 'package:dart_frog/dart_frog.dart';
+import 'package:in_memory_todos_data_source/in_memory_todos_data_source.dart';
+import 'package:todos_data_source/todos_data_source.dart';
 
 // Handler middleware(Handler handler) {
 //   return (context) async {
@@ -13,8 +15,14 @@ import 'package:dart_frog/dart_frog.dart';
 //   };
 // }
 
-Handler middleware(Handler handler) => handler.use(requestLogger());
+final _dataSource = InMemoryTodosDataSource();
 
-Middleware asyncGreetingProvider() {
-  return provider<Future<String>>((context) async => 'Hello World');
+Handler middleware(Handler handler) {
+  return handler
+      .use(requestLogger())
+      .use(provider<TodosDataSource>((_) => _dataSource));
 }
+
+// Middleware asyncGreetingProvider() {
+//   return provider<Future<String>>((context) async => 'Hello World');
+// }
